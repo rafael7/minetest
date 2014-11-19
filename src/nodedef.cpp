@@ -67,18 +67,18 @@ void NodeBox::serialize(std::ostream &os, u16 protocol_version) const
 				i = fixed.begin();
 				i != fixed.end(); i++)
 		{
-			writeV3F1000(os, i->MinEdge);
-			writeV3F1000(os, i->MaxEdge);
+			writeV3FixedPoint(os, i->MinEdge);
+			writeV3FixedPoint(os, i->MaxEdge);
 		}
 	}
 	else if(type == NODEBOX_WALLMOUNTED)
 	{
-		writeV3F1000(os, wall_top.MinEdge);
-		writeV3F1000(os, wall_top.MaxEdge);
-		writeV3F1000(os, wall_bottom.MinEdge);
-		writeV3F1000(os, wall_bottom.MaxEdge);
-		writeV3F1000(os, wall_side.MinEdge);
-		writeV3F1000(os, wall_side.MaxEdge);
+		writeV3FixedPoint(os, wall_top.MinEdge);
+		writeV3FixedPoint(os, wall_top.MaxEdge);
+		writeV3FixedPoint(os, wall_bottom.MinEdge);
+		writeV3FixedPoint(os, wall_bottom.MaxEdge);
+		writeV3FixedPoint(os, wall_side.MinEdge);
+		writeV3FixedPoint(os, wall_side.MaxEdge);
 	}
 }
 
@@ -98,19 +98,19 @@ void NodeBox::deSerialize(std::istream &is)
 		while(fixed_count--)
 		{
 			aabb3f box;
-			box.MinEdge = readV3F1000(is);
-			box.MaxEdge = readV3F1000(is);
+			box.MinEdge = readV3FixedPoint(is);
+			box.MaxEdge = readV3FixedPoint(is);
 			fixed.push_back(box);
 		}
 	}
 	else if(type == NODEBOX_WALLMOUNTED)
 	{
-		wall_top.MinEdge = readV3F1000(is);
-		wall_top.MaxEdge = readV3F1000(is);
-		wall_bottom.MinEdge = readV3F1000(is);
-		wall_bottom.MaxEdge = readV3F1000(is);
-		wall_side.MinEdge = readV3F1000(is);
-		wall_side.MaxEdge = readV3F1000(is);
+		wall_top.MinEdge = readV3FixedPoint(is);
+		wall_top.MaxEdge = readV3FixedPoint(is);
+		wall_bottom.MinEdge = readV3FixedPoint(is);
+		wall_bottom.MaxEdge = readV3FixedPoint(is);
+		wall_side.MinEdge = readV3FixedPoint(is);
+		wall_side.MaxEdge = readV3FixedPoint(is);
 	}
 }
 
@@ -128,7 +128,7 @@ void TileDef::serialize(std::ostream &os, u16 protocol_version) const
 	writeU8(os, animation.type);
 	writeU16(os, animation.aspect_w);
 	writeU16(os, animation.aspect_h);
-	writeF1000(os, animation.length);
+	writeFixedPoint(os, animation.length);
 	if(protocol_version >= 17)
 		writeU8(os, backface_culling);
 }
@@ -140,7 +140,7 @@ void TileDef::deSerialize(std::istream &is)
 	animation.type = (TileAnimationType)readU8(is);
 	animation.aspect_w = readU16(is);
 	animation.aspect_h = readU16(is);
-	animation.length = readF1000(is);
+	animation.length = readFixedPoint(is);
 	if(version >= 1)
 		backface_culling = readU8(is);
 }
@@ -153,12 +153,12 @@ static void serializeSimpleSoundSpec(const SimpleSoundSpec &ss,
 		std::ostream &os)
 {
 	os<<serializeString(ss.name);
-	writeF1000(os, ss.gain);
+	writeFixedPoint(os, ss.gain);
 }
 static void deSerializeSimpleSoundSpec(SimpleSoundSpec &ss, std::istream &is)
 {
 	ss.name = deSerializeString(is);
-	ss.gain = readF1000(is);
+	ss.gain = readFixedPoint(is);
 }
 
 /*
@@ -259,7 +259,7 @@ void ContentFeatures::serialize(std::ostream &os, u16 protocol_version)
 		writeS16(os, i->second);
 	}
 	writeU8(os, drawtype);
-	writeF1000(os, visual_scale);
+	writeFixedPoint(os, visual_scale);
 	writeU8(os, 6);
 	for(u32 i = 0; i < 6; i++)
 		tiledef[i].serialize(os, protocol_version);
@@ -325,7 +325,7 @@ void ContentFeatures::deSerialize(std::istream &is)
 		groups[name] = value;
 	}
 	drawtype = (enum NodeDrawType)readU8(is);
-	visual_scale = readF1000(is);
+	visual_scale = readFixedPoint(is);
 	if(readU8(is) != 6)
 		throw SerializationError("unsupported tile count");
 	for(u32 i = 0; i < 6; i++)
@@ -1058,7 +1058,7 @@ void ContentFeatures::serializeOld(std::ostream &os, u16 protocol_version)
 			writeS16(os, i->second);
 		}
 		writeU8(os, drawtype);
-		writeF1000(os, visual_scale);
+		writeFixedPoint(os, visual_scale);
 		writeU8(os, 6);
 		for (u32 i = 0; i < 6; i++)
 			tiledef[i].serialize(os, protocol_version);
@@ -1106,7 +1106,7 @@ void ContentFeatures::serializeOld(std::ostream &os, u16 protocol_version)
 				writeS16(os, i->second);
 		}
 		writeU8(os, drawtype);
-		writeF1000(os, visual_scale);
+		writeFixedPoint(os, visual_scale);
 		writeU8(os, 6);
 		for (u32 i = 0; i < 6; i++)
 			tiledef[i].serialize(os, protocol_version);
@@ -1167,7 +1167,7 @@ void ContentFeatures::deSerializeOld(std::istream &is, int version)
 			groups[name] = value;
 		}
 		drawtype = (enum NodeDrawType)readU8(is);
-		visual_scale = readF1000(is);
+		visual_scale = readFixedPoint(is);
 		if (readU8(is) != 6)
 			throw SerializationError("unsupported tile count");
 		for (u32 i = 0; i < 6; i++)
@@ -1215,7 +1215,7 @@ void ContentFeatures::deSerializeOld(std::istream &is, int version)
 			groups[name] = value;
 		}
 		drawtype = (enum NodeDrawType)readU8(is);
-		visual_scale = readF1000(is);
+		visual_scale = readFixedPoint(is);
 		if (readU8(is) != 6)
 			throw SerializationError("unsupported tile count");
 		for (u32 i = 0; i < 6; i++)

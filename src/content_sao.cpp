@@ -242,7 +242,7 @@ public:
 			// command (0 = update position)
 			writeU8(os, 0);
 			// pos
-			writeV3F1000(os, m_base_position);
+			writeV3FixedPoint(os, m_base_position);
 			// create message and add to list
 			ActiveObjectMessage aom(getId(), false, os.str());
 			m_messages_out.push_back(aom);
@@ -268,7 +268,7 @@ public:
 		// version
 		writeU8(os, 0);
 		// pos
-		writeV3F1000(os, m_base_position);
+		writeV3FixedPoint(os, m_base_position);
 		// itemstring
 		os<<serializeString(m_itemstring);
 		return os.str();
@@ -445,8 +445,8 @@ ServerActiveObject* LuaEntitySAO::create(ServerEnvironment *env, v3f pos,
 			name = deSerializeString(is);
 			state = deSerializeLongString(is);
 			hp = readS16(is);
-			velocity = readV3F1000(is);
-			yaw = readF1000(is);
+			velocity = readV3FixedPoint(is);
+			yaw = readFixedPoint(is);
 		}
 	}
 	// create object
@@ -605,8 +605,8 @@ std::string LuaEntitySAO::getClientInitializationData(u16 protocol_version)
 		os<<serializeString(""); // name
 		writeU8(os, 0); // is_player
 		writeS16(os, getId()); //id
-		writeV3F1000(os, m_base_position);
-		writeF1000(os, m_yaw);
+		writeV3FixedPoint(os, m_base_position);
+		writeFixedPoint(os, m_yaw);
 		writeS16(os, m_hp);
 
 		writeU8(os, 4 + m_bone_position.size()); // number of messages stuffed in here
@@ -623,8 +623,8 @@ std::string LuaEntitySAO::getClientInitializationData(u16 protocol_version)
 		writeU8(os, 0); // version
 		os<<serializeString(""); // name
 		writeU8(os, 0); // is_player
-		writeV3F1000(os, m_base_position);
-		writeF1000(os, m_yaw);
+		writeV3FixedPoint(os, m_base_position);
+		writeFixedPoint(os, m_yaw);
 		writeS16(os, m_hp);
 		writeU8(os, 2); // number of messages stuffed in here
 		os<<serializeLongString(getPropertyPacket()); // message 1
@@ -654,9 +654,9 @@ std::string LuaEntitySAO::getStaticData()
 	// hp
 	writeS16(os, m_hp);
 	// velocity
-	writeV3F1000(os, m_velocity);
+	writeV3FixedPoint(os, m_velocity);
 	// yaw
-	writeF1000(os, m_yaw);
+	writeFixedPoint(os, m_yaw);
 	return os.str();
 }
 
@@ -1048,8 +1048,8 @@ std::string PlayerSAO::getClientInitializationData(u16 protocol_version)
 		os<<serializeString(m_player->getName()); // name
 		writeU8(os, 1); // is_player
 		writeS16(os, getId()); //id
-		writeV3F1000(os, m_player->getPosition() + v3f(0,BS*1,0));
-		writeF1000(os, m_player->getYaw());
+		writeV3FixedPoint(os, m_player->getPosition() + v3f(0,BS*1,0));
+		writeFixedPoint(os, m_player->getYaw());
 		writeS16(os, getHP());
 
 		writeU8(os, 5 + m_bone_position.size()); // number of messages stuffed in here
@@ -1069,8 +1069,8 @@ std::string PlayerSAO::getClientInitializationData(u16 protocol_version)
 		writeU8(os, 0); // version
 		os<<serializeString(m_player->getName()); // name
 		writeU8(os, 1); // is_player
-		writeV3F1000(os, m_player->getPosition() + v3f(0,BS*1,0));
-		writeF1000(os, m_player->getYaw());
+		writeV3FixedPoint(os, m_player->getPosition() + v3f(0,BS*1,0));
+		writeFixedPoint(os, m_player->getYaw());
 		writeS16(os, getHP());
 		writeU8(os, 2); // number of messages stuffed in here
 		os<<serializeLongString(getPropertyPacket()); // message 1

@@ -25,7 +25,7 @@ void StaticObject::serialize(std::ostream &os)
 	// type
 	writeU8(os, type);
 	// pos
-	writeV3F1000(os, pos);
+	writeV3FixedPoint(os, pos);
 	// data
 	os<<serializeString(data);
 }
@@ -34,7 +34,7 @@ void StaticObject::deSerialize(std::istream &is, u8 version)
 	// type
 	type = readU8(is);
 	// pos
-	pos = readV3F1000(is);
+	pos = readV3FixedPoint(is);
 	// data
 	data = deSerializeString(is);
 }

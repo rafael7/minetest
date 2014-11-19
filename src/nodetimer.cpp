@@ -29,14 +29,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 void NodeTimer::serialize(std::ostream &os) const
 {
-	writeF1000(os, timeout);
-	writeF1000(os, elapsed);
+	writeFixedPoint(os, timeout);
+	writeFixedPoint(os, elapsed);
 }
 
 void NodeTimer::deSerialize(std::istream &is)
 {
-	timeout = readF1000(is);
-	elapsed = readF1000(is);
+	timeout = readFixedPoint(is);
+	elapsed = readFixedPoint(is);
 }
 
 /*

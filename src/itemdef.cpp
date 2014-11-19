@@ -133,7 +133,7 @@ void ItemDefinition::serialize(std::ostream &os, u16 protocol_version) const
 	os<<serializeString(description);
 	os<<serializeString(inventory_image);
 	os<<serializeString(wield_image);
-	writeV3F1000(os, wield_scale);
+	writeV3FixedPoint(os, wield_scale);
 	writeS16(os, stack_max);
 	writeU8(os, usable);
 	writeU8(os, liquids_pointable);
@@ -154,10 +154,10 @@ void ItemDefinition::serialize(std::ostream &os, u16 protocol_version) const
 	if(protocol_version > 17){
 		//serializeSimpleSoundSpec(sound_place, os);
 		os<<serializeString(sound_place.name);
-		writeF1000(os, sound_place.gain);
+		writeFixedPoint(os, sound_place.gain);
 	}
 	if(protocol_version > 20){
-		writeF1000(os, range);
+		writeFixedPoint(os, range);
 	}
 }
 
@@ -175,7 +175,7 @@ void ItemDefinition::deSerialize(std::istream &is)
 	description = deSerializeString(is);
 	inventory_image = deSerializeString(is);
 	wield_image = deSerializeString(is);
-	wield_scale = readV3F1000(is);
+	wield_scale = readV3FixedPoint(is);
 	stack_max = readS16(is);
 	usable = readU8(is);
 	liquids_pointable = readU8(is);
@@ -205,10 +205,10 @@ void ItemDefinition::deSerialize(std::istream &is)
 		node_placement_prediction = deSerializeString(is);
 		//deserializeSimpleSoundSpec(sound_place, is);
 		sound_place.name = deSerializeString(is);
-		sound_place.gain = readF1000(is);
+		sound_place.gain = readFixedPoint(is);
 	}
 	if(version == 3) {
-		range = readF1000(is);
+		range = readFixedPoint(is);
 	}
 	// If you add anything here, insert it primarily inside the try-catch
 	// block to not need to increase the version.

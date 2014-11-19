@@ -1624,7 +1624,7 @@ void Server::ProcessData(u8 *data, u32 datasize, u16 peer_id)
 			//send dummy pos for legacy reasons only
 			writeV3S16(&reply[2+1], floatToInt(v3f(0,0,0), BS));
 			writeU64(&reply[2+1+6], m_env->getServerMap().getSeed());
-			writeF1000(&reply[2+1+6+8], g_settings->getFloat("dedicated_server_step"));
+			writeFixedPoint(&reply[2+1+6+8], g_settings->getFloat("dedicated_server_step"));
 
 			// Send as reliable
 			m_clients.send(peer_id, 0, reply, true);
@@ -2957,18 +2957,18 @@ void Server::SendMovement(u16 peer_id)
 	std::ostringstream os(std::ios_base::binary);
 
 	writeU16(os, TOCLIENT_MOVEMENT);
-	writeF1000(os, g_settings->getFloat("movement_acceleration_default"));
-	writeF1000(os, g_settings->getFloat("movement_acceleration_air"));
-	writeF1000(os, g_settings->getFloat("movement_acceleration_fast"));
-	writeF1000(os, g_settings->getFloat("movement_speed_walk"));
-	writeF1000(os, g_settings->getFloat("movement_speed_crouch"));
-	writeF1000(os, g_settings->getFloat("movement_speed_fast"));
-	writeF1000(os, g_settings->getFloat("movement_speed_climb"));
-	writeF1000(os, g_settings->getFloat("movement_speed_jump"));
-	writeF1000(os, g_settings->getFloat("movement_liquid_fluidity"));
-	writeF1000(os, g_settings->getFloat("movement_liquid_fluidity_smooth"));
-	writeF1000(os, g_settings->getFloat("movement_liquid_sink"));
-	writeF1000(os, g_settings->getFloat("movement_gravity"));
+	writeFixedPoint(os, g_settings->getFloat("movement_acceleration_default"));
+	writeFixedPoint(os, g_settings->getFloat("movement_acceleration_air"));
+	writeFixedPoint(os, g_settings->getFloat("movement_acceleration_fast"));
+	writeFixedPoint(os, g_settings->getFloat("movement_speed_walk"));
+	writeFixedPoint(os, g_settings->getFloat("movement_speed_crouch"));
+	writeFixedPoint(os, g_settings->getFloat("movement_speed_fast"));
+	writeFixedPoint(os, g_settings->getFloat("movement_speed_climb"));
+	writeFixedPoint(os, g_settings->getFloat("movement_speed_jump"));
+	writeFixedPoint(os, g_settings->getFloat("movement_liquid_fluidity"));
+	writeFixedPoint(os, g_settings->getFloat("movement_liquid_fluidity_smooth"));
+	writeFixedPoint(os, g_settings->getFloat("movement_liquid_sink"));
+	writeFixedPoint(os, g_settings->getFloat("movement_gravity"));
 
 	// Make data buffer
 	std::string s = os.str();
@@ -3030,7 +3030,7 @@ void Server::SendDeathscreen(u16 peer_id,bool set_camera_point_target,
 
 	writeU16(os, TOCLIENT_DEATHSCREEN);
 	writeU8(os, set_camera_point_target);
-	writeV3F1000(os, camera_point_target);
+	writeV3FixedPoint(os, camera_point_target);
 
 	// Make data buffer
 	std::string s = os.str();
@@ -3192,11 +3192,11 @@ void Server::SendSpawnParticle(u16 peer_id, v3f pos, v3f velocity, v3f accelerat
 
 	std::ostringstream os(std::ios_base::binary);
 	writeU16(os, TOCLIENT_SPAWN_PARTICLE);
-	writeV3F1000(os, pos);
-	writeV3F1000(os, velocity);
-	writeV3F1000(os, acceleration);
-	writeF1000(os, expirationtime);
-	writeF1000(os, size);
+	writeV3FixedPoint(os, pos);
+	writeV3FixedPoint(os, velocity);
+	writeV3FixedPoint(os, acceleration);
+	writeFixedPoint(os, expirationtime);
+	writeFixedPoint(os, size);
 	writeU8(os,  collisiondetection);
 	os<<serializeLongString(texture);
 	writeU8(os, vertical);
@@ -3227,17 +3227,17 @@ void Server::SendAddParticleSpawner(u16 peer_id, u16 amount, float spawntime, v3
 	writeU16(os, TOCLIENT_ADD_PARTICLESPAWNER);
 
 	writeU16(os, amount);
-	writeF1000(os, spawntime);
-	writeV3F1000(os, minpos);
-	writeV3F1000(os, maxpos);
-	writeV3F1000(os, minvel);
-	writeV3F1000(os, maxvel);
-	writeV3F1000(os, minacc);
-	writeV3F1000(os, maxacc);
-	writeF1000(os, minexptime);
-	writeF1000(os, maxexptime);
-	writeF1000(os, minsize);
-	writeF1000(os, maxsize);
+	writeFixedPoint(os, spawntime);
+	writeV3FixedPoint(os, minpos);
+	writeV3FixedPoint(os, maxpos);
+	writeV3FixedPoint(os, minvel);
+	writeV3FixedPoint(os, maxvel);
+	writeV3FixedPoint(os, minacc);
+	writeV3FixedPoint(os, maxacc);
+	writeFixedPoint(os, minexptime);
+	writeFixedPoint(os, maxexptime);
+	writeFixedPoint(os, minsize);
+	writeFixedPoint(os, maxsize);
 	writeU8(os,  collisiondetection);
 	os<<serializeLongString(texture);
 	writeU32(os, id);
@@ -3288,16 +3288,16 @@ void Server::SendHUDAdd(u16 peer_id, u32 id, HudElement *form)
 	writeU16(os, TOCLIENT_HUDADD);
 	writeU32(os, id);
 	writeU8(os, (u8)form->type);
-	writeV2F1000(os, form->pos);
+	writeV2FixedPoint(os, form->pos);
 	os << serializeString(form->name);
-	writeV2F1000(os, form->scale);
+	writeV2FixedPoint(os, form->scale);
 	os << serializeString(form->text);
 	writeU32(os, form->number);
 	writeU32(os, form->item);
 	writeU32(os, form->dir);
-	writeV2F1000(os, form->align);
-	writeV2F1000(os, form->offset);
-	writeV3F1000(os, form->world_pos);
+	writeV2FixedPoint(os, form->align);
+	writeV2FixedPoint(os, form->offset);
+	writeV3FixedPoint(os, form->world_pos);
 	writeV2S32(os,form->size);
 
 	// Make data buffer
@@ -3336,14 +3336,14 @@ void Server::SendHUDChange(u16 peer_id, u32 id, HudElementStat stat, void *value
 		case HUD_STAT_SCALE:
 		case HUD_STAT_ALIGN:
 		case HUD_STAT_OFFSET:
-			writeV2F1000(os, *(v2f *)value);
+			writeV2FixedPoint(os, *(v2f *)value);
 			break;
 		case HUD_STAT_NAME:
 		case HUD_STAT_TEXT:
 			os << serializeString(*(std::string *)value);
 			break;
 		case HUD_STAT_WORLD_POS:
-			writeV3F1000(os, *(v3f *)value);
+			writeV3FixedPoint(os, *(v3f *)value);
 			break;
 		case HUD_STAT_SIZE:
 			writeV2S32(os,*(v2s32 *)value);
@@ -3444,7 +3444,7 @@ void Server::SendTimeOfDay(u16 peer_id, u16 time, f32 time_speed)
 	SharedBuffer<u8> data(2+2+4);
 	writeU16(&data[0], TOCLIENT_TIME_OF_DAY);
 	writeU16(&data[2], time);
-	writeF1000(&data[4], time_speed);
+	writeFixedPoint(&data[4], time_speed);
 
 	if (peer_id == PEER_ID_INEXISTENT) {
 		m_clients.sendToAll(0,data,true);
@@ -3488,9 +3488,9 @@ void Server::SendMovePlayer(u16 peer_id)
 
 	std::ostringstream os(std::ios_base::binary);
 	writeU16(os, TOCLIENT_MOVE_PLAYER);
-	writeV3F1000(os, player->getPosition());
-	writeF1000(os, player->getPitch());
-	writeF1000(os, player->getYaw());
+	writeV3FixedPoint(os, player->getPosition());
+	writeFixedPoint(os, player->getPitch());
+	writeFixedPoint(os, player->getYaw());
 
 	{
 		v3f pos = player->getPosition();
@@ -3519,7 +3519,7 @@ void Server::SendLocalPlayerAnimations(u16 peer_id, v2s32 animation_frames[4], f
 	writeV2S32(os, animation_frames[1]);
 	writeV2S32(os, animation_frames[2]);
 	writeV2S32(os, animation_frames[3]);
-	writeF1000(os, animation_speed);
+	writeFixedPoint(os, animation_speed);
 
 	// Make data buffer
 	std::string s = os.str();
@@ -3533,8 +3533,8 @@ void Server::SendEyeOffset(u16 peer_id, v3f first, v3f third)
 	std::ostringstream os(std::ios_base::binary);
 
 	writeU16(os, TOCLIENT_EYE_OFFSET);
-	writeV3F1000(os, first);
-	writeV3F1000(os, third);
+	writeV3FixedPoint(os, first);
+	writeV3FixedPoint(os, third);
 
 	// Make data buffer
 	std::string s = os.str();
@@ -3647,9 +3647,9 @@ s32 Server::playSound(const SimpleSoundSpec &spec,
 	writeU16(os, TOCLIENT_PLAY_SOUND);
 	writeS32(os, id);
 	os<<serializeString(spec.name);
-	writeF1000(os, spec.gain * params.gain);
+	writeFixedPoint(os, spec.gain * params.gain);
 	writeU8(os, params.type);
-	writeV3F1000(os, pos);
+	writeV3FixedPoint(os, pos);
 	writeU16(os, params.object);
 	writeU8(os, params.loop);
 	// Make data buffer

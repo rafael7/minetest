@@ -49,19 +49,19 @@ std::string gob_cmd_update_position(
 	// command
 	writeU8(os, GENERIC_CMD_UPDATE_POSITION);
 	// pos
-	writeV3F1000(os, position);
+	writeV3FixedPoint(os, position);
 	// velocity
-	writeV3F1000(os, velocity);
+	writeV3FixedPoint(os, velocity);
 	// acceleration
-	writeV3F1000(os, acceleration);
+	writeV3FixedPoint(os, acceleration);
 	// yaw
-	writeF1000(os, yaw);
+	writeFixedPoint(os, yaw);
 	// do_interpolate
 	writeU8(os, do_interpolate);
 	// is_end_position (for interpolation)
 	writeU8(os, is_movement_end);
 	// update_interval (for interpolation)
-	writeF1000(os, update_interval);
+	writeFixedPoint(os, update_interval);
 	return os.str();
 }
 
@@ -87,7 +87,7 @@ std::string gob_cmd_set_sprite(
 	// parameters
 	writeV2S16(os, p);
 	writeU16(os, num_frames);
-	writeF1000(os, framelength);
+	writeFixedPoint(os, framelength);
 	writeU8(os, select_horiz_by_yawpitch);
 	return os.str();
 }
@@ -124,9 +124,9 @@ std::string gob_cmd_update_physics_override(float physics_override_speed, float 
 	// command 
 	writeU8(os, GENERIC_CMD_SET_PHYSICS_OVERRIDE);
 	// parameters
-	writeF1000(os, physics_override_speed);
-	writeF1000(os, physics_override_jump);
-	writeF1000(os, physics_override_gravity);
+	writeFixedPoint(os, physics_override_speed);
+	writeFixedPoint(os, physics_override_jump);
+	writeFixedPoint(os, physics_override_gravity);
 	// these are sent inverted so we get true when the server sends nothing
 	writeU8(os, !sneak);
 	writeU8(os, !sneak_glitch);
@@ -139,9 +139,9 @@ std::string gob_cmd_update_animation(v2f frames, float frame_speed, float frame_
 	// command 
 	writeU8(os, GENERIC_CMD_SET_ANIMATION);
 	// parameters
-	writeV2F1000(os, frames);
-	writeF1000(os, frame_speed);
-	writeF1000(os, frame_blend);
+	writeV2FixedPoint(os, frames);
+	writeFixedPoint(os, frame_speed);
+	writeFixedPoint(os, frame_blend);
 	return os.str();
 }
 
@@ -152,8 +152,8 @@ std::string gob_cmd_update_bone_position(std::string bone, v3f position, v3f rot
 	writeU8(os, GENERIC_CMD_SET_BONE_POSITION);
 	// parameters
 	os<<serializeString(bone);
-	writeV3F1000(os, position);
-	writeV3F1000(os, rotation);
+	writeV3FixedPoint(os, position);
+	writeV3FixedPoint(os, rotation);
 	return os.str();
 }
 
@@ -165,8 +165,8 @@ std::string gob_cmd_update_attachment(int parent_id, std::string bone, v3f posit
 	// parameters
 	writeS16(os, parent_id);
 	os<<serializeString(bone);
-	writeV3F1000(os, position);
-	writeV3F1000(os, rotation);
+	writeV3FixedPoint(os, position);
+	writeV3FixedPoint(os, rotation);
 	return os.str();
 }
 

@@ -82,11 +82,11 @@ void ObjectProperties::serialize(std::ostream &os) const
 	writeU8(os, 1); // version
 	writeS16(os, hp_max);
 	writeU8(os, physical);
-	writeF1000(os, weight);
-	writeV3F1000(os, collisionbox.MinEdge);
-	writeV3F1000(os, collisionbox.MaxEdge);
+	writeFixedPoint(os, weight);
+	writeV3FixedPoint(os, collisionbox.MinEdge);
+	writeV3FixedPoint(os, collisionbox.MaxEdge);
 	os<<serializeString(visual);
-	writeV2F1000(os, visual_size);
+	writeV2FixedPoint(os, visual_size);
 	writeU16(os, textures.size());
 	for(u32 i=0; i<textures.size(); i++){
 		os<<serializeString(textures[i]);
@@ -95,7 +95,7 @@ void ObjectProperties::serialize(std::ostream &os) const
 	writeV2S16(os, initial_sprite_basepos);
 	writeU8(os, is_visible);
 	writeU8(os, makes_footstep_sound);
-	writeF1000(os, automatic_rotate);
+	writeFixedPoint(os, automatic_rotate);
 	// Added in protocol version 14
 	os<<serializeString(mesh);
 	writeU16(os, colors.size());
@@ -103,9 +103,9 @@ void ObjectProperties::serialize(std::ostream &os) const
 		writeARGB8(os, colors[i]);
 	}
 	writeU8(os, collideWithObjects);
-	writeF1000(os,stepheight);
+	writeFixedPoint(os,stepheight);
 	writeU8(os, automatic_face_movement_dir);
-	writeF1000(os, automatic_face_movement_dir_offset);
+	writeFixedPoint(os, automatic_face_movement_dir_offset);
 	// Add stuff only at the bottom.
 	// Never remove anything, because we don't want new versions of this
 }
@@ -118,11 +118,11 @@ void ObjectProperties::deSerialize(std::istream &is)
 		try{
 			hp_max = readS16(is);
 			physical = readU8(is);
-			weight = readF1000(is);
-			collisionbox.MinEdge = readV3F1000(is);
-			collisionbox.MaxEdge = readV3F1000(is);
+			weight = readFixedPoint(is);
+			collisionbox.MinEdge = readV3FixedPoint(is);
+			collisionbox.MaxEdge = readV3FixedPoint(is);
 			visual = deSerializeString(is);
-			visual_size = readV2F1000(is);
+			visual_size = readV2FixedPoint(is);
 			textures.clear();
 			u32 texture_count = readU16(is);
 			for(u32 i=0; i<texture_count; i++){
@@ -132,16 +132,16 @@ void ObjectProperties::deSerialize(std::istream &is)
 			initial_sprite_basepos = readV2S16(is);
 			is_visible = readU8(is);
 			makes_footstep_sound = readU8(is);
-			automatic_rotate = readF1000(is);
+			automatic_rotate = readFixedPoint(is);
 			mesh = deSerializeString(is);
 			u32 color_count = readU16(is);
 			for(u32 i=0; i<color_count; i++){
 				colors.push_back(readARGB8(is));
 			}
 			collideWithObjects = readU8(is);
-			stepheight = readF1000(is);
+			stepheight = readFixedPoint(is);
 			automatic_face_movement_dir = readU8(is);
-			automatic_face_movement_dir_offset = readF1000(is);
+			automatic_face_movement_dir_offset = readFixedPoint(is);
 		}catch(SerializationError &e){}
 	}
 	else

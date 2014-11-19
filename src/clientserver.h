@@ -142,7 +142,7 @@ enum ToClientCommand
 		[2] u8 deployed version
 		[3] v3s16 player's position + v3f(0,BS/2,0) floatToInt'd
 		[12] u64 map seed (new as of 2011-02-27)
-		[20] f1000 recommended send interval (in seconds) (new as of 14)
+		[20] FixedPoint recommended send interval (in seconds) (new as of 14)
 
 		NOTE: The position in here is deprecated; position is
 		      explicitly sent afterwards
@@ -217,7 +217,7 @@ enum ToClientCommand
 		u16 command
 		u16 time (0-23999)
 		Added in a later version:
-		f1000 time_speed
+		FixedPoint time_speed
 	*/
 
 	// (oops, there is some gap here)
@@ -265,9 +265,9 @@ enum ToClientCommand
 	TOCLIENT_MOVE_PLAYER = 0x34,
 	/*
 		u16 command
-		v3f1000 player position
-		f1000 player pitch
-		f1000 player yaw
+		v3FixedPoint player position
+		FixedPoint player pitch
+		FixedPoint player yaw
 	*/
 
 	TOCLIENT_ACCESS_DENIED = 0x35,
@@ -292,7 +292,7 @@ enum ToClientCommand
 	/*
 		u16 command
 		u8 bool set camera point target
-		v3f1000 camera point target (to point the death cause or whatever)
+		v3FixedPoint camera point target (to point the death cause or whatever)
 	*/
 
 	TOCLIENT_MEDIA = 0x38,
@@ -407,28 +407,28 @@ enum ToClientCommand
 	TOCLIENT_MOVEMENT = 0x45,
 	/*
 		u16 command
-		f1000 movement_acceleration_default
-		f1000 movement_acceleration_air
-		f1000 movement_acceleration_fast
-		f1000 movement_speed_walk
-		f1000 movement_speed_crouch
-		f1000 movement_speed_fast
-		f1000 movement_speed_climb
-		f1000 movement_speed_jump
-		f1000 movement_liquid_fluidity
-		f1000 movement_liquid_fluidity_smooth
-		f1000 movement_liquid_sink
-		f1000 movement_gravity
+		FixedPoint movement_acceleration_default
+		FixedPoint movement_acceleration_air
+		FixedPoint movement_acceleration_fast
+		FixedPoint movement_speed_walk
+		FixedPoint movement_speed_crouch
+		FixedPoint movement_speed_fast
+		FixedPoint movement_speed_climb
+		FixedPoint movement_speed_jump
+		FixedPoint movement_liquid_fluidity
+		FixedPoint movement_liquid_fluidity_smooth
+		FixedPoint movement_liquid_sink
+		FixedPoint movement_gravity
 	*/
 
 	TOCLIENT_SPAWN_PARTICLE = 0x46,
 	/*
 		u16 command
-		v3f1000 pos
-		v3f1000 velocity
-		v3f1000 acceleration
-		f1000 expirationtime
-		f1000 size
+		v3FixedPoint pos
+		v3FixedPoint velocity
+		v3FixedPoint acceleration
+		FixedPoint expirationtime
+		FixedPoint size
 		u8 bool collisiondetection
 		u8 bool vertical
 		u32 len
@@ -439,17 +439,17 @@ enum ToClientCommand
 	/*
 		u16 command
 		u16 amount
-		f1000 spawntime
-		v3f1000 minpos
-		v3f1000 maxpos
-		v3f1000 minvel
-		v3f1000 maxvel
-		v3f1000 minacc
-		v3f1000 maxacc
-		f1000 minexptime
-		f1000 maxexptime
-		f1000 minsize
-		f1000 maxsize
+		FixedPoint spawntime
+		v3FixedPoint minpos
+		v3FixedPoint maxpos
+		v3FixedPoint minvel
+		v3FixedPoint maxvel
+		v3FixedPoint minacc
+		v3FixedPoint maxacc
+		FixedPoint minexptime
+		FixedPoint maxexptime
+		FixedPoint minsize
+		FixedPoint maxsize
 		u8 bool collisiondetection
 		u8 bool vertical
 		u32 len
@@ -468,18 +468,18 @@ enum ToClientCommand
 		u16 command
 		u32 id
 		u8 type
-		v2f1000 pos
+		v2FixedPoint pos
 		u32 len
 		u8[len] name
-		v2f1000 scale
+		v2FixedPoint scale
 		u32 len2
 		u8[len2] text
 		u32 number
 		u32 item
 		u32 dir
-		v2f1000 align
-		v2f1000 offset
-		v3f1000 world_pos
+		v2FixedPoint align
+		v2FixedPoint offset
+		v3FixedPoint world_pos
 		v2s32 size
 	*/
 
@@ -494,7 +494,7 @@ enum ToClientCommand
 		u16 command
 		u32 id
 		u8 stat
-		[v2f1000 data |
+		[v2FixedPoint data |
 		 u32 len
 		 u8[len] data |
 		 u32 data]
@@ -547,14 +547,14 @@ enum ToClientCommand
 		v2s32 walk
 		v2s32 dig
 		v2s32 walk+dig
-		f1000 frame_speed
+		FixedPoint frame_speed
 	*/
 
 	TOCLIENT_EYE_OFFSET = 0x52,
 	/*
 		u16 command
-		v3f1000 first
-		v3f1000 third
+		v3FixedPoint first
+		v3FixedPoint third
 	*/
 };
 

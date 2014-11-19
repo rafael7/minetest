@@ -31,7 +31,7 @@ void ToolCapabilities::serialize(std::ostream &os, u16 protocol_version) const
 		writeU8(os, 1); // version
 	else
 		writeU8(os, 2); // version
-	writeF1000(os, full_punch_interval);
+	writeFixedPoint(os, full_punch_interval);
 	writeS16(os, max_drop_level);
 	writeU32(os, groupcaps.size());
 	for(std::map<std::string, ToolGroupCap>::const_iterator
@@ -45,7 +45,7 @@ void ToolCapabilities::serialize(std::ostream &os, u16 protocol_version) const
 		for(std::map<int, float>::const_iterator
 				i = cap->times.begin(); i != cap->times.end(); i++){
 			writeS16(os, i->first);
-			writeF1000(os, i->second);
+			writeFixedPoint(os, i->second);
 		}
 	}
 	if(protocol_version > 17){
@@ -63,7 +63,7 @@ void ToolCapabilities::deSerialize(std::istream &is)
 	int version = readU8(is);
 	if(version != 1 && version != 2) throw SerializationError(
 			"unsupported ToolCapabilities version");
-	full_punch_interval = readF1000(is);
+	full_punch_interval = readFixedPoint(is);
 	max_drop_level = readS16(is);
 	groupcaps.clear();
 	u32 groupcaps_size = readU32(is);
@@ -75,7 +75,7 @@ void ToolCapabilities::deSerialize(std::istream &is)
 		u32 times_size = readU32(is);
 		for(u32 i=0; i<times_size; i++){
 			int level = readS16(is);
-			float time = readF1000(is);
+			float time = readFixedPoint(is);
 			cap.times[level] = time;
 		}
 		groupcaps[name] = cap;

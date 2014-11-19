@@ -155,10 +155,10 @@ inline s8 readS8(const u8 *data){
 	return (s8)readU8(data);
 }
 
-inline void writeF1000(u8 *data, f32 i){
+inline void writeFixedPoint(u8 *data, f32 i){
 	writeS32(data, i*FIXEDPOINT_FACTOR);
 }
-inline f32 readF1000(const u8 *data){
+inline f32 readFixedPoint(const u8 *data){
 	return (f32)readS32(data)*FIXEDPOINT_INVFACTOR;
 }
 
@@ -177,31 +177,31 @@ inline v3s32 readV3S32(const u8 *data)
 	return p;
 }
 
-inline void writeV3F1000(u8 *data, v3f p)
+inline void writeV3FixedPoint(u8 *data, v3f p)
 {
-	writeF1000(&data[0], p.X);
-	writeF1000(&data[4], p.Y);
-	writeF1000(&data[8], p.Z);
+	writeFixedPoint(&data[0], p.X);
+	writeFixedPoint(&data[4], p.Y);
+	writeFixedPoint(&data[8], p.Z);
 }
-inline v3f readV3F1000(const u8 *data)
+inline v3f readV3FixedPoint(const u8 *data)
 {
 	v3f p;
-	p.X = (float)readF1000(&data[0]);
-	p.Y = (float)readF1000(&data[4]);
-	p.Z = (float)readF1000(&data[8]);
+	p.X = (f32)readFixedPoint(&data[0]);
+	p.Y = (f32)readFixedPoint(&data[4]);
+	p.Z = (f32)readFixedPoint(&data[8]);
 	return p;
 }
 
-inline void writeV2F1000(u8 *data, v2f p)
+inline void writeV2FixedPoint(u8 *data, v2f p)
 {
-	writeF1000(&data[0], p.X);
-	writeF1000(&data[4], p.Y);
+	writeFixedPoint(&data[0], p.X);
+	writeFixedPoint(&data[4], p.Y);
 }
-inline v2f readV2F1000(const u8 *data)
+inline v2f readV2FixedPoint(const u8 *data)
 {
 	v2f p;
-	p.X = (float)readF1000(&data[0]);
-	p.Y = (float)readF1000(&data[4]);
+	p.X = (f32)readFixedPoint(&data[0]);
+	p.Y = (f32)readFixedPoint(&data[4]);
 	return p;
 }
 
@@ -330,43 +330,43 @@ inline s8 readS8(std::istream &is)
 	return (s8)readU8(is);
 }
 
-inline void writeF1000(std::ostream &os, f32 p)
+inline void writeFixedPoint(std::ostream &os, f32 p)
 {
 	char buf[4];
-	writeF1000((u8*)buf, p);
+	writeFixedPoint((u8*)buf, p);
 	os.write(buf, 4);
 }
-inline f32 readF1000(std::istream &is)
+inline f32 readFixedPoint(std::istream &is)
 {
 	char buf[4] = {0};
 	is.read(buf, 4);
-	return readF1000((u8*)buf);
+	return readFixedPoint((u8*)buf);
 }
 
-inline void writeV3F1000(std::ostream &os, v3f p)
+inline void writeV3FixedPoint(std::ostream &os, v3f p)
 {
 	char buf[12];
-	writeV3F1000((u8*)buf, p);
+	writeV3FixedPoint((u8*)buf, p);
 	os.write(buf, 12);
 }
-inline v3f readV3F1000(std::istream &is)
+inline v3f readV3FixedPoint(std::istream &is)
 {
 	char buf[12];
 	is.read(buf, 12);
-	return readV3F1000((u8*)buf);
+	return readV3FixedPoint((u8*)buf);
 }
 
-inline void writeV2F1000(std::ostream &os, v2f p)
+inline void writeV2FixedPoint(std::ostream &os, v2f p)
 {
 	char buf[8];
-	writeV2F1000((u8*)buf, p);
+	writeV2FixedPoint((u8*)buf, p);
 	os.write(buf, 8);
 }
-inline v2f readV2F1000(std::istream &is)
+inline v2f readV2FixedPoint(std::istream &is)
 {
 	char buf[8] = {0};
 	is.read(buf, 8);
-	return readV2F1000((u8*)buf);
+	return readV2FixedPoint((u8*)buf);
 }
 
 inline void writeV2S16(std::ostream &os, v2s16 p)

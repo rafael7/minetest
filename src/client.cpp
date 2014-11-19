@@ -1069,7 +1069,7 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		if(datasize >= 2+1+6+8+4)
 		{
 			// Get map seed
-			m_recommended_send_interval = readF1000(&data[2+1+6+8]);
+			m_recommended_send_interval = readFixedPoint(&data[2+1+6+8]);
 			infostream<<"Client: received recommended send interval "
 					<<m_recommended_send_interval<<std::endl;
 		}
@@ -1228,7 +1228,7 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 
 		if(datasize >= 2 + 2 + 4)
 		{
-			time_speed = readF1000(&data[4]);
+			time_speed = readFixedPoint(&data[4]);
 		}
 		else {
 			// Old message; try to approximate speed of time by ourselves
@@ -1374,18 +1374,18 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		std::string datastring((char*)&data[2], datasize-2);
 		std::istringstream is(datastring, std::ios_base::binary);
 
-		player->movement_acceleration_default   = readF1000(is) * BS;
-		player->movement_acceleration_air       = readF1000(is) * BS;
-		player->movement_acceleration_fast      = readF1000(is) * BS;
-		player->movement_speed_walk             = readF1000(is) * BS;
-		player->movement_speed_crouch           = readF1000(is) * BS;
-		player->movement_speed_fast             = readF1000(is) * BS;
-		player->movement_speed_climb            = readF1000(is) * BS;
-		player->movement_speed_jump             = readF1000(is) * BS;
-		player->movement_liquid_fluidity        = readF1000(is) * BS;
-		player->movement_liquid_fluidity_smooth = readF1000(is) * BS;
-		player->movement_liquid_sink            = readF1000(is) * BS;
-		player->movement_gravity                = readF1000(is) * BS;
+		player->movement_acceleration_default   = readFixedPoint(is) * BS;
+		player->movement_acceleration_air       = readFixedPoint(is) * BS;
+		player->movement_acceleration_fast      = readFixedPoint(is) * BS;
+		player->movement_speed_walk             = readFixedPoint(is) * BS;
+		player->movement_speed_crouch           = readFixedPoint(is) * BS;
+		player->movement_speed_fast             = readFixedPoint(is) * BS;
+		player->movement_speed_climb            = readFixedPoint(is) * BS;
+		player->movement_speed_jump             = readFixedPoint(is) * BS;
+		player->movement_liquid_fluidity        = readFixedPoint(is) * BS;
+		player->movement_liquid_fluidity_smooth = readFixedPoint(is) * BS;
+		player->movement_liquid_sink            = readFixedPoint(is) * BS;
+		player->movement_gravity                = readFixedPoint(is) * BS;
 	}
 	else if(command == TOCLIENT_HP)
 	{
@@ -1417,9 +1417,9 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		std::string datastring((char*)&data[2], datasize-2);
 		std::istringstream is(datastring, std::ios_base::binary);
 
-		v3f pos = readV3F1000(is);
-		f32 pitch = readF1000(is);
-		f32 yaw = readF1000(is);
+		v3f pos = readV3FixedPoint(is);
+		f32 pitch = readFixedPoint(is);
+		f32 yaw = readFixedPoint(is);
 		player->setPosition(pos);
 
 		infostream<<"Client got TOCLIENT_MOVE_PLAYER"
@@ -1454,7 +1454,7 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		std::istringstream is(datastring, std::ios_base::binary);
 		
 		bool set_camera_point_target = readU8(is);
-		v3f camera_point_target = readV3F1000(is);
+		v3f camera_point_target = readV3FixedPoint(is);
 		
 		ClientEvent event;
 		event.type                                = CE_DEATHSCREEN;
@@ -1621,9 +1621,9 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 
 		s32 server_id = readS32(is);
 		std::string name = deSerializeString(is);
-		float gain = readF1000(is);
+		float gain = readFixedPoint(is);
 		int type = readU8(is); // 0=local, 1=positional, 2=object
-		v3f pos = readV3F1000(is);
+		v3f pos = readV3FixedPoint(is);
 		u16 object_id = readU16(is);
 		bool loop = readU8(is);
 		// Start playing
@@ -1727,11 +1727,11 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		std::string datastring((char*)&data[2], datasize-2);
 		std::istringstream is(datastring, std::ios_base::binary);
 
-		v3f pos                 = readV3F1000(is);
-		v3f vel                 = readV3F1000(is);
-		v3f acc                 = readV3F1000(is);
-		float expirationtime    = readF1000(is);
-		float size              = readF1000(is);
+		v3f pos                 = readV3FixedPoint(is);
+		v3f vel                 = readV3FixedPoint(is);
+		v3f acc                 = readV3FixedPoint(is);
+		float expirationtime    = readFixedPoint(is);
+		float size              = readFixedPoint(is);
 		bool collisiondetection = readU8(is);
 		std::string texture     = deSerializeLongString(is);
 		bool vertical           = false;
@@ -1758,17 +1758,17 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		std::istringstream is(datastring, std::ios_base::binary);
 
 		u16 amount              = readU16(is);
-		float spawntime         = readF1000(is);
-		v3f minpos              = readV3F1000(is);
-		v3f maxpos              = readV3F1000(is);
-		v3f minvel              = readV3F1000(is);
-		v3f maxvel              = readV3F1000(is);
-		v3f minacc              = readV3F1000(is);
-		v3f maxacc              = readV3F1000(is);
-		float minexptime        = readF1000(is);
-		float maxexptime        = readF1000(is);
-		float minsize           = readF1000(is);
-		float maxsize           = readF1000(is);
+		float spawntime         = readFixedPoint(is);
+		v3f minpos              = readV3FixedPoint(is);
+		v3f maxpos              = readV3FixedPoint(is);
+		v3f minvel              = readV3FixedPoint(is);
+		v3f maxvel              = readV3FixedPoint(is);
+		v3f minacc              = readV3FixedPoint(is);
+		v3f maxacc              = readV3FixedPoint(is);
+		float minexptime        = readFixedPoint(is);
+		float maxexptime        = readFixedPoint(is);
+		float minsize           = readFixedPoint(is);
+		float maxsize           = readFixedPoint(is);
 		bool collisiondetection = readU8(is);
 		std::string texture     = deSerializeLongString(is);
 		u32 id                  = readU32(is);
@@ -1818,19 +1818,19 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 
 		u32 id           = readU32(is);
 		u8 type          = readU8(is);
-		v2f pos          = readV2F1000(is);
+		v2f pos          = readV2FixedPoint(is);
 		std::string name = deSerializeString(is);
-		v2f scale        = readV2F1000(is);
+		v2f scale        = readV2FixedPoint(is);
 		std::string text = deSerializeString(is);
 		u32 number       = readU32(is);
 		u32 item         = readU32(is);
 		u32 dir          = readU32(is);
-		v2f align        = readV2F1000(is);
-		v2f offset       = readV2F1000(is);
+		v2f align        = readV2FixedPoint(is);
+		v2f offset       = readV2FixedPoint(is);
 		v3f world_pos;
 		v2s32 size;
 		try{
-			world_pos    = readV3F1000(is);
+			world_pos    = readV3FixedPoint(is);
 		}catch(SerializationError &e) {};
 		try{
 			size = readV2S32(is);
@@ -1881,11 +1881,11 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		
 		if (stat == HUD_STAT_POS || stat == HUD_STAT_SCALE ||
 			stat == HUD_STAT_ALIGN || stat == HUD_STAT_OFFSET)
-			v2fdata = readV2F1000(is);
+			v2fdata = readV2FixedPoint(is);
 		else if (stat == HUD_STAT_NAME || stat == HUD_STAT_TEXT)
 			sdata = deSerializeString(is);
 		else if (stat == HUD_STAT_WORLD_POS)
-			v3fdata = readV3F1000(is);
+			v3fdata = readV3FixedPoint(is);
 		else if (stat == HUD_STAT_SIZE )
 			v2s32data = readV2S32(is);
 		else
@@ -1979,7 +1979,7 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		player->local_animations[1] = readV2S32(is);
 		player->local_animations[2] = readV2S32(is);
 		player->local_animations[3] = readV2S32(is);
-		player->local_animation_speed = readF1000(is);
+		player->local_animation_speed = readFixedPoint(is);
 	}
 	else if(command == TOCLIENT_EYE_OFFSET)
 	{
@@ -1989,8 +1989,8 @@ void Client::ProcessData(u8 *data, u32 datasize, u16 sender_peer_id)
 		LocalPlayer *player = m_env.getLocalPlayer();
 		assert(player != NULL);
 
-		player->eye_offset_first = readV3F1000(is);
-		player->eye_offset_third = readV3F1000(is);
+		player->eye_offset_first = readV3FixedPoint(is);
+		player->eye_offset_third = readV3FixedPoint(is);
 	}
 	else
 	{

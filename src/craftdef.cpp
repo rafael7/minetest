@@ -698,14 +698,14 @@ std::string CraftDefinitionToolRepair::dump() const
 
 void CraftDefinitionToolRepair::serializeBody(std::ostream &os) const
 {
-	writeF1000(os, additional_wear);
+	writeFixedPoint(os, additional_wear);
 }
 
 void CraftDefinitionToolRepair::deSerializeBody(std::istream &is, int version)
 {
 	if(version != 1) throw SerializationError(
 			"unsupported CraftDefinitionToolRepair version");
-	additional_wear = readF1000(is);
+	additional_wear = readFixedPoint(is);
 }
 
 /*
@@ -775,7 +775,7 @@ void CraftDefinitionCooking::serializeBody(std::ostream &os) const
 {
 	os<<serializeString(output);
 	os<<serializeString(recipe);
-	writeF1000(os, cooktime);
+	writeFixedPoint(os, cooktime);
 	replacements.serialize(os);
 }
 
@@ -785,7 +785,7 @@ void CraftDefinitionCooking::deSerializeBody(std::istream &is, int version)
 			"unsupported CraftDefinitionCooking version");
 	output = deSerializeString(is);
 	recipe = deSerializeString(is);
-	cooktime = readF1000(is);
+	cooktime = readFixedPoint(is);
 	replacements.deSerialize(is);
 }
 
@@ -854,7 +854,7 @@ std::string CraftDefinitionFuel::dump() const
 void CraftDefinitionFuel::serializeBody(std::ostream &os) const
 {
 	os<<serializeString(recipe);
-	writeF1000(os, burntime);
+	writeFixedPoint(os, burntime);
 	replacements.serialize(os);
 }
 
@@ -863,7 +863,7 @@ void CraftDefinitionFuel::deSerializeBody(std::istream &is, int version)
 	if(version != 1) throw SerializationError(
 			"unsupported CraftDefinitionFuel version");
 	recipe = deSerializeString(is);
-	burntime = readF1000(is);
+	burntime = readFixedPoint(is);
 	replacements.deSerialize(is);
 }
 
